@@ -1,57 +1,80 @@
-class List{
-	private int[] dataArray;
+class Student{
+	String id;	
+	String name;	
+	int prfMarks;
+	int dbmsMarks;
+	
+	Student(){
+		
+	}
+	Student(String id, String name, int prfMarks, int dbmsMarks){
+		this.id=id;
+		this.name=name;
+		this.prfMarks=prfMarks;
+		this.dbmsMarks=dbmsMarks;
+	}
+	public boolean equals(Student s1){
+		return this.id.equalsIgnoreCase(s1.id);
+	}
+}
+class StudentList{ //Collection of student objects
+	private Student[] studentArray;
 	private int nextIndex;
 	private double loadFact;
 	private int initSize;
 	
-	List(int initSize, double loadFact){
-		dataArray=new int[initSize];
+	StudentList(int initSize, double loadFact){
+		studentArray=new Student[initSize];
 		nextIndex=0;
 		this.loadFact=loadFact;
 		this.initSize=initSize;
 	}
 	private void extendsArray(){
-		int tempDataArray[]=new int[dataArray.length+(int)(loadFact*dataArray.length)];
-		for (int i = 0; i < dataArray.length; i++){
-			tempDataArray[i]=dataArray[i];
+		Student tempstudentArray[]=new Student[studentArray.length+(int)(loadFact*studentArray.length)];
+		for (int i = 0; i < studentArray.length; i++){
+			tempstudentArray[i]=studentArray[i];
 		}
-		dataArray=tempDataArray; 
+		studentArray=tempstudentArray; 
 	}
 	private boolean isFull(){
-		return nextIndex>=dataArray.length;
+		return nextIndex>=studentArray.length;
 	}
-	public void add(int data){ //Insertion order
+	public void add(Student student){ //Insertion order
 		if(isFull()){
 			extendsArray();
 		}
-		dataArray[nextIndex++]=data;
+		studentArray[nextIndex++]=student;
 	}
-	public void add(int index,int data){
+	public void add(int index,Student student){
 		if(isFull()){
 			extendsArray();
 		}
 		if(index>=0 && index<=nextIndex){
 			for (int i = nextIndex-1; i >=index; i--){
-				dataArray[i+1]=dataArray[i];
+				studentArray[i+1]=studentArray[i];
 			}
-			dataArray[index]=data;
+			studentArray[index]=student;
 			nextIndex++;
 		}
 	}
-	public void addFirst(int data){
-		
-		add(0,data);
+	public void addFirst(Student student){
+		add(0,student);
 	}
-	public void addLast(int data){
-		
-		add(data);
+	public void addLast(Student student){
+		add(nextIndex,student);
+	}
+	public void add(int...intData){
+		//
+	}
+	public void add(int index, int...intData){
+		//
 	}
 	public void trimToSize(){
-		int[] tempDataArray=new int[size()];
-		for (int i = 0; i < dataArray.length; i++){
-			tempDataArray[i]=dataArray[i];
+		Student[] tempstudentArray=new Student[size()];
+		for (int i = 0; i < studentArray.length; i++){
+			tempstudentArray[i]=studentArray[i];
 		}
-		dataArray=tempDataArray;
+		studentArray=tempstudentArray;
 	}
 	public int size(){
 		return nextIndex;
@@ -61,31 +84,36 @@ class List{
 		//
 	}
 	public void clear(){
-		dataArray=new int[initSize];
+		studentArray=new Student[initSize];
 		nextIndex=0;
 	}
 	public void remove(int index){
-		if (index>=0 && index < nextIndex){
-			for (int i = index; i <nextIndex-1 ; i++){
-				dataArray[i]=dataArray[i+1];
+		if(!isEmpty()){
+			if(index>=0 && index<nextIndex){
+				for(int i=index; i<nextIndex-1; i++){
+					studentArray[i]=studentArray[i+1];
+				}
 			}	
+			nextIndex--;
 		}
-		nextIndex--;	
 	}
 	public void removeFirst(){
-		if(!isEmpty()){
-			
-			remove(0);
-		}
+		remove(0);
 	}
 	public void removeLast(){
-		if(!isEmpty()){
-			remove(nextIndex-1);
-		}
+		remove(size()-1);
 	}
-	public int search(int data){
+	public boolean remove(Student student){
+		int index=search(student);
+		if (indexfghd)
+		{
+			_
+		}
+		
+	}	
+	public int search(Student student){
 		for (int i = 0; i < nextIndex; i++){
-			if(dataArray[i]==data){
+			if(studentArray[i].equals(student)){
 				return i;
 			}
 		}
@@ -94,9 +122,9 @@ class List{
 	public void display(){
 		System.out.print("[");
 		for (int i = 0; i < nextIndex; i++){
-			System.out.print(dataArray[i]+", ");
+			System.out.print("("+studentArray[i].id+", "+studentArray[i].name+", "+studentArray[i].prfMarks+", "+studentArray[i].dbmsMarks+")");
 		}
-		System.out.println(isEmpty()? "empty]":"\b\b]");
+		System.out.println(isEmpty()? "empty]":"]");
 	}
 	public void display(int start){
 		
@@ -117,39 +145,27 @@ class List{
 		return nextIndex<=0;
 	}
 	public int capacity(){
-		return dataArray.length;
+		return studentArray.length;
 	}
 }
 class Demo{
 	public static void main(String args[]){
-		List list1=new List(12,0.25);
-		list1.add(10); //Insertion order
-		list1.add(20);
-		list1.add(30);
-		list1.add(40);
-		list1.add(50);
-		list1.add(60);
-		list1.add(70);
-		list1.add(80);
-		list1.add(90);
+		StudentList list1=new StudentList(12,0.25);
+		list1.add(new Student("S001","Nethra",20,30)); //Insertion order
+		list1.add(new Student("S002","Shithila",20,30));
+		list1.add(new Student("S003","Esanda",20,30));
+		list1.add(new Student("S004","Perera",20,30));
+		list1.add(new Student("S005","Niroth",20,30));
+		
 		list1.display(); //[10,20,30,40,50 ........90]
+		System.out.println("\nIndex of S003-Bimal : "+list1.search(new Student("S0003","Bimal",35,30))); //2
 		
-		list1.add(3,35);
-		list1.display(); //[10,20,30,35,40 ........90]
-
-		list1.addFirst(3);
-		list1.display(); //[10,20,30,35,40 ........90]
-
-		list1.addLast(3);
-		list1.display();
-		
-		list1.remove(3);
-		list1.display();
-		
-		list1.removeFirst();
-		list1.display();
-		
-		list1.removeLast();
-		list1.display();
 	}
 }
+
+
+
+
+
+
+
