@@ -20,7 +20,7 @@ class List{
 	private boolean isFull(){
 		return nextIndex>=dataArray.length;
 	}
-	public void add(int data){
+	public void add(int data){ //Insertion order
 		if(isFull()){
 			extendsArray();
 		}
@@ -30,17 +30,21 @@ class List{
 		if(isFull()){
 			extendsArray();
 		}
-		dataArray[nextIndex++]=data;
+		if(index>=0 && index<=nextIndex){
+			for (int i = nextIndex-1; i >=index; i--){
+				dataArray[i+1]=dataArray[i];
+			}
+			dataArray[index]=data;
+			nextIndex++;
+		}
 	}
 	public void addFirst(int data){
-		if(isFull()){
-			extendsArray();
-		}
+		
+		add(0,data);
 	}
 	public void addLast(int data){
-		if(isFull()){
-			extendsArray();
-		}
+		
+		add(data);
 	}
 	public void trimToSize(){
 		int[] tempDataArray=new int[size()];
@@ -61,21 +65,22 @@ class List{
 		nextIndex=0;
 	}
 	public void remove(int index){
-		if(!isEmpty()){
-			//Insert code here
-			nextIndex--;
+		if (index>=0 && index < nextIndex){
+			for (int i = index; i <nextIndex-1 ; i++){
+				dataArray[i]=dataArray[i+1];
+			}	
 		}
+		nextIndex--;	
 	}
 	public void removeFirst(){
 		if(!isEmpty()){
-			//Insert code here
-			nextIndex--;
+			
+			remove(0);
 		}
 	}
 	public void removeLast(){
 		if(!isEmpty()){
-			//Insert code here
-			nextIndex--;
+			remove(nextIndex-1);
 		}
 	}
 	public int search(int data){
@@ -118,7 +123,7 @@ class List{
 class Demo{
 	public static void main(String args[]){
 		List list1=new List(12,0.25);
-		list1.add(10);
+		list1.add(10); //Insertion order
 		list1.add(20);
 		list1.add(30);
 		list1.add(40);
@@ -127,15 +132,24 @@ class Demo{
 		list1.add(70);
 		list1.add(80);
 		list1.add(90);
-		list1.add(100);
-		list1.add(110);
-		list1.add(120);
-		list1.display(); //[10,20,30,40,50 ........120]
-		System.out.println("Size      : "+list1.size()); //12
+		list1.display(); //[10,20,30,40,50 ........90]
 		
-		list1.remove(3); //3->40
-		list1.display(); //[10,20,30,50 ........120]
-		System.out.println("Size      : "+list1.size()); //11
-		System.out.println("Index of 50 : "+list1.search(50)); //3
+		list1.add(3,35);
+		list1.display(); //[10,20,30,35,40 ........90]
+
+		list1.addFirst(3);
+		list1.display(); //[10,20,30,35,40 ........90]
+
+		list1.addLast(3);
+		list1.display();
+		
+		list1.remove(3);
+		list1.display();
+		
+		list1.removeFirst();
+		list1.display();
+		
+		list1.removeLast();
+		list1.display();
 	}
 }
